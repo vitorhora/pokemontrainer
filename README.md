@@ -154,7 +154,9 @@ Component View and their Relationships.
 
 
 &nbsp;
+
 # Installation
+
 ## Prerequisites
 
 You need to have the following prerequisites installed on your system:
@@ -166,60 +168,63 @@ You need to have the following prerequisites installed on your system:
 
 ### Configuring the database
 
-1. Open the MySQL administration tool and create a user with sufficient permissions to manage.
-Example:
-*username: user
-password: 12345*
-2. Create the database
+- Open the MySQL administration tool and create a user with sufficient permissions to manage.
+Example: username: user and password: 12345.
+
+- Create the database:
+
 ```sql
 CREATE DATABASE  IF NOT EXISTS `pokemontrainer`;
 USE `pokemontrainer`;
 ```
-3. Inform the credentials in the *application.properties* file of the ***pokemontrainer*** and ***pokemonfree*** project
+
+- Inform the credentials in the *application.properties* file of the *pokemontrainer* and *pokemonfree* project:
+
 ```markdown
 spring.datasource.username=user
 spring.datasource.password=12345
 ```
-4. Now you do not need to worry about the database anymore. The *pokemontrainer* project will generate all the tables when started.
+
+- Now you do not need to worry about the database anymore. The *pokemontrainer* project will generate all the tables when started.
+
 
 ### Starting the applications
 
 #### 1. pokemontrainer
 
 1.1 After unpacking the ZIP, navigate to the folder and run the following Maven command:
+
 ```shell
 mvn clean install
 ```
+
 1.2 Now let's start the application:
+
 ```shell
 java -jar /pokemontrainer/target/pokemontrainer-0.0.1-SNAPSHOT.jar
 ```
-1.3 The application is configured to respond on *port 8080*. To test if it started successfully, let's open the Swagger API documentation:
+
+1.3 The application is configured to respond on *port 8080*. 
+
+To test if it started successfully, let's open the Swagger API documentation:
+
+&nbsp;
+
 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html "http://localhost:8080/swagger-ui/index.html")
 &nbsp;
 ![](https://raw.githubusercontent.com/vitorhora/pokemontrainer/main/swagger-pokemontrainer.png)
 &nbsp;
-1.4 Users loaded in memory. It will serve to validate security, alongside the token.
-```java
-@Bean
-	InMemoryUserDetailsManager user() {
-	    User user1 = (User) User.withUsername("admin")
-	        .password("admin")
-	        .authorities("full")
-	        .build();
 
-	    User user2 = (User) User.withUsername("user")
-	        .password("user")
-	        .authorities("full")
-	        .build();
-	    
-	    User user3 = (User) User.withUsername("teste")
-		        .password("teste")
-		        .authorities("full")
-		        .build();
-	    return new InMemoryUserDetailsManager(user1, user2, user3);
-	}
-```
+1.4 Users loaded in memory. It will serve to validate security, alongside the token:
+
+- username:admin
+- password:admin
+- username:user
+- password:user
+- username:teste
+- password:teste
+
+
 
 *****************
 **Be patient.** At this moment, we have only deployed the Pokémon management application. In the next steps, we will start the other two modules on different ports.
@@ -228,41 +233,36 @@ java -jar /pokemontrainer/target/pokemontrainer-0.0.1-SNAPSHOT.jar
 #### 2. pokemonoauth
 
 2.1 After unpacking the ZIP, navigate to the folder and run the following Maven command:
+
 ```shell
 mvn clean install
 ```
+
 2.2 Now let's start the application:
+
 ```shell
 java -jar /pokemonoauth/target/pokemonoauth-0.0.1-SNAPSHOT.jar
 ```
-2.3 The application is configured to respond on *port 8081*. To test if it started successfully, let's open the Swagger API documentation:
+
+2.3 The application is configured to respond on *port 8081*. 
+
+To test if it started successfully, let's open the Swagger API documentation:
+
+&nbsp;
+
 [http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html "http://localhost:8081/swagger-ui/index.html")
 &nbsp;
 ![](https://raw.githubusercontent.com/vitorhora/pokemontrainer/main/swagger-pokemonoauth.png)
 &nbsp;
 
-2.4 Users loaded in memory. It will serve to create the token, to be validated by the client authorization.
-```java
-@Bean
-	InMemoryUserDetailsManager user() {
-	    User user1 = (User) User.withUsername("admin")
-	        .password("admin")
-	        .authorities("full")
-	        .build();
+2.4 Users loaded in memory. It will serve to create the token, to be validated by the client authorization:
 
-	    User user2 = (User) User.withUsername("user")
-	        .password("user")
-	        .authorities("full")
-	        .build();
-	    
-	    User user3 = (User) User.withUsername("teste")
-		        .password("teste")
-		        .authorities("full")
-		        .build();
-	    
-	    return new InMemoryUserDetailsManager(user1, user2, user3);
-	}
-```
+- username:admin
+- password:admin
+- username:user
+- password:user
+- username:teste
+- password:teste
 
 *****************
 Now, you can already use the system, but the database **does not have any Pokémon**. 
@@ -274,20 +274,24 @@ The good news is that after the service finishes loading, there **will be hundre
 #### 3. pokemonfree
 
 3.1 After unpacking the ZIP, navigate to the folder and run the following Maven command:
+
 ```shell
 mvn clean install
 ```
+
 3.2 Now let's start the application:
+
 ```shell
 java -jar /pokemonfree/target/pokemonfree-0.0.1-SNAPSHOT.jar
 ```
-3.3 The application is configured to respond on *port 8083*.
-&nbsp;
-![](https://raw.githubusercontent.com/vitorhora/pokemontrainer/main/swagger-pokemonoauth.png)
+
+
 &nbsp;
 The service will take a **few minutes to load all the Pokémon (1293)**, but you can already use the APIs normally.
 Pokémon are loaded into the database in batches of 100. 
 To check the progress of the loading, perform a query in the database:
+&nbsp;
+
 ```sql
 SELECT COUNT(*) FROM pokemontrainer.pokemon;
 ```
