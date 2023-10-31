@@ -162,6 +162,7 @@ You need to have the following prerequisites installed on your system:
 - [Java Development Kit (JDK 17)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Maven](https://maven.apache.org/download.cgi) installed and configured on your system.
 - [MySQL 8](https://dev.mysql.com/downloads/mysql/) installed and configured on your system.
+- Spring Boot 3.1.5
 
 ### Configuring the database
 
@@ -198,6 +199,28 @@ java -jar /pokemontrainer/target/pokemontrainer-0.0.1-SNAPSHOT.jar
 &nbsp;
 ![](https://raw.githubusercontent.com/vitorhora/pokemontrainer/main/swagger-pokemontrainer.png)
 &nbsp;
+1.4 Users loaded in memory. It will serve to validate security, alongside the token.
+```java
+@Bean
+	InMemoryUserDetailsManager user() {
+	    User user1 = (User) User.withUsername("admin")
+	        .password("admin")
+	        .authorities("full")
+	        .build();
+
+	    User user2 = (User) User.withUsername("user")
+	        .password("user")
+	        .authorities("full")
+	        .build();
+	    
+	    User user3 = (User) User.withUsername("teste")
+		        .password("teste")
+		        .authorities("full")
+		        .build();
+	    return new InMemoryUserDetailsManager(user1, user2, user3);
+	}
+```
+
 *****************
 **Be patient.** At this moment, we have only deployed the Pokémon management application. In the next steps, we will start the other two modules on different ports.
 *****************
@@ -217,6 +240,29 @@ java -jar /pokemonoauth/target/pokemonoauth-0.0.1-SNAPSHOT.jar
 &nbsp;
 ![](https://raw.githubusercontent.com/vitorhora/pokemontrainer/main/swagger-pokemonoauth.png)
 &nbsp;
+
+2.4 Users loaded in memory. It will serve to create the token, to be validated by the client authorization.
+```java
+@Bean
+	InMemoryUserDetailsManager user() {
+	    User user1 = (User) User.withUsername("admin")
+	        .password("admin")
+	        .authorities("full")
+	        .build();
+
+	    User user2 = (User) User.withUsername("user")
+	        .password("user")
+	        .authorities("full")
+	        .build();
+	    
+	    User user3 = (User) User.withUsername("teste")
+		        .password("teste")
+		        .authorities("full")
+		        .build();
+	    
+	    return new InMemoryUserDetailsManager(user1, user2, user3);
+	}
+```
 
 *****************
 Now, you can already use the system, but the database **does not have any Pokémon**. 
